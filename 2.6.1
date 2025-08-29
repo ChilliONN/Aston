@@ -1,0 +1,106 @@
+import java.util.*;
+
+class Student {
+    private String name;
+    private String group;
+    private int course;
+    private List<Integer> grades;
+
+    public Student(String name, String group, int course, List<Integer> grades) {
+        this.name = name;
+        this.group = group;
+        this.course = course;
+        this.grades = grades;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCourse() {
+        return course;
+    }
+
+    public void setCourse(int course) {
+        this.course = course;
+    }
+
+    public double getAverageGrade() {
+        if (grades.isEmpty()) return 0;
+        int sum = 0;
+        for (int grade : grades) {
+            sum += grade;
+        }
+        return (double) sum / grades.size();
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", group='" + group + '\'' +
+                ", course=" + course +
+                ", grades=" + grades +
+                '}';
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Set<Student> students = new HashSet<>();
+        students.add(new Student("Иван Иванов", "Группа1", 1, Arrays.asList(4, 3, 5, 4)));
+        students.add(new Student("Петр Петров", "Группа2", 2, Arrays.asList(2, 3, 2, 4)));
+        students.add(new Student("Мария Сидорова", "Группа1", 1, Arrays.asList(5, 5, 4, 5)));
+        students.add(new Student("Алексей Козлов", "Группа3", 3, Arrays.asList(3, 2, 2, 3)));
+        students.add(new Student("Елена Васильева", "Группа2", 2, Arrays.asList(4, 4, 5, 4)));
+
+        System.out.println("Исходный список студентов:");
+        printAllStudents(students);
+
+        removeLowPerformingStudents(students);
+        System.out.println("\nСтуденты после удаления тех, у кого средний балл < 3:");
+        printAllStudents(students);
+
+        promoteStudents(students);
+        System.out.println("\nСтуденты после перевода на следующий курс:");
+        printAllStudents(students);
+
+        System.out.println("\nСтуденты 2 курса:");
+        printStudents(students, 2);
+    }
+
+    // Метод для удаления студентов со средним баллом < 3
+    public static void removeLowPerformingStudents(Set<Student> students) {
+        Iterator<Student> iterator = students.iterator();
+        while (iterator.hasNext()) {
+            Student student = iterator.next();
+            if (student.getAverageGrade() < 3) {
+                iterator.remove();
+            }
+        }
+    }
+
+    // Метод для перевода студентов на следующий курс
+    public static void promoteStudents(Set<Student> students) {
+        for (Student student : students) {
+            if (student.getAverageGrade() >= 3) {
+                student.setCourse(student.getCourse() + 1);
+            }
+        }
+    }
+
+
+    public static void printStudents(Set<Student> students, int course) {
+        for (Student student : students) {
+            if (student.getCourse() == course) {
+                System.out.println(student.getName());
+            }
+        }
+    }
+
+    public static void printAllStudents(Set<Student> students) {
+        for (Student student : students) {
+            System.out.println(student);
+        }
+    }
+}
